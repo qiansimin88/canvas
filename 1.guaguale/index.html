@@ -7,7 +7,9 @@
     <title>Document</title>
 </head>
 <body>
-    <canvas id="canvas" width="300" height="70" style="background:#fff;"></canvas>
+    <canvas id="canvas" width="300" height="70" style="background:#fff;">
+        而威尔翁人
+    </canvas>
 </body>
 <script>
     let canvas = document.getElementById( 'canvas' ),
@@ -23,11 +25,13 @@
         context.save();
         context.fillStyle = "#666";
         context.beginPath();
+        context.fillText('hahahaha', 30, 20);
         //画满画布
         context.fillRect( 0, 0, canvas.getAttribute('width'), canvas.getAttribute('height') );
         //还原画布的初始状态
         context.restore();
     };
+    
 
     //计算当前的触碰坐标
     function getPosition ( e ) {
