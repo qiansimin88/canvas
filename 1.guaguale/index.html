@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <canvas id="canvas" width="300" height="70" style="background:#fff;"></canvas>
+</body>
+<script>
+    let canvas = document.getElementById( 'canvas' ),
+        context = canvas.getContext( '2d' );  //获得上下文
+        
+        //裁切的半径
+        var clipRadius = 15,
+        //是否拖动状态
+            isDragging = false; 
+
+    //初始化 画一个 用于被擦除的canvas画布
+    window.onload = function () {
+        context.save();
+        context.fillStyle = "#666";
+        context.beginPath();
+        //画满画布
+        context.fillRect( 0, 0, canvas.getAttribute('width'), canvas.getAttribute('height') );
+        //还原画布的初始状态
+        context.restore();
+    };
+
+    //计算当前的触碰坐标
+    function getPosition ( e ) {
+        let [ x, y, canvasPosition ] = [
+            e.targetTouches[0].clientX,
+            e.targetTouches[0].clientY,
+            canvas.getBoundingClientRect()
+        ];
+        return {
+            x: x - canvasPosition.left,
+            y: y - canvasPosition.top
+        }
+    }   
+
+    //裁切效果
+    //思路：  clip画一个小圆当做裁切的范围，后续只有该范围内的绘画才有效果，所以我们把整个画布都透明掉 但是也只有裁切的范围内才会透明
+    function moveClipHandler ( loc ) {
+        context.save();
+        //开始新的路径 断开一开始 上面生成画布的路径
+        context.beginPath();
+        //画个圆当做裁切对象
+        context.arc( loc.x, loc.y, clipRadius, 0, Math.PI * 2, false );
+        //裁切
+        context.clip();
+        //在裁切的圆的范围内 透明 而不是全部透明
+        context.clearRect( 0, 0, canvas.getAttribute('width'), canvas.getAttribute('height') );
+        context.restore();
+    }
+
+    //手指触碰上 计算  裁切的 圆点坐标
+    canvas.addEventListener('touchstart', e => {
+        var loc = getPosition( e );
+        isDragging = true;
+        moveClipHandler( loc );
+    } );
+
+    //移动  持续绘画
+    canvas.addEventListener('touchmove', e => {
+        var loc = null;
+       if( isDragging ) {
+            loc = getPosition( e );
+            moveClipHandler( loc );
+       }
+    } );
+
+    canvas.addEventListener('touchend', e => {
+        isDragging = false;
+    } );
+
+</script>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+</html>
