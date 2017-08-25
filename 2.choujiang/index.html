@@ -52,9 +52,13 @@
             i % 2 ? context.fillStyle = '#FF6766' : context.fillStyle = '#FD5757';
             context.fill();            
             context.restore();
-            
+
             //绘制字体
-            
+            context.save();
+            context.font = 'bold 16px Helvetica, Arial';
+            context.fillStyle = '#fff';
+            //translate移动位置 x,y 坐标
+            context.translate()
         }
     }
 
