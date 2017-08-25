@@ -57,8 +57,10 @@
             context.save();
             context.font = 'bold 16px Helvetica, Arial';
             context.fillStyle = '#fff';
-            //translate移动位置 x,y 坐标
-            context.translate()
+            //translate移动位置 x,y 坐标  Math.cos(弧度)的到余弦值  并且余弦值 cons = 邻边 / 斜边, 已知斜边就是圆的半径，所以得出 邻边的 X
+            context.translate(
+                CENTER_X + Math.cos( start_draw + end_draw / 2 ) * CICLE_RADIUS
+            )
         }
     }
 
