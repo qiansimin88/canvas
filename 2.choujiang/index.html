@@ -7,6 +7,58 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <canvas id="canvas" width="500" height="500"></canvas>
 </body>
+<script>
+    var canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d');
+
+    //圆的半径
+    const CICLE_RADIUS = 200;
+    //字体到圆心的半径
+    const FONT_RADIUS = 160;
+
+    //圆心坐标
+    const CENTER_X = canvas.width / 2,
+          CENTER_Y = canvas.height / 2;
+    //奖品集合
+    const PRIZEARRAY = [ '胖虎阿福', '啊岳真的很严格', '我觉得不行', '怕不是傻子', '又长又宽', '不可能打工' ];
+    //单个奖品圆弧的弧度
+    const SINGER_RADIAN = Math.PI * 2 / PRIZEARRAY.length;
+    //绘画的初始弧度
+    const START_RADIAN = 0;
+    //抽奖开始按钮的半径
+    const BUTTON_RADIUS = 50;
+
+    drawCanvas();
+
+    //绘制一切元素
+    function drawCanvas () {
+        //清场，理解成动画里面的帧 清除上一帧，开始绘画下一帧;
+        context.clearRect( 0, 0, canvas.width, canvas.height );
+        //  画圆
+        for( var i = 0; i < PRIZEARRAY.length; i++ ) {
+            //保存canvas状态
+            context.save();
+            //求出每次寻坏出来的圆弧 开始 和 结束弧度 进行绘制
+            var start_draw =  START_RADIAN + SINGER_RADIAN * i,
+                end_draw = start_draw + SINGER_RADIAN;
+            context.beginPath();
+            //顺时针
+            context.arc( CENTER_X, CENTER_Y, CICLE_RADIUS, start_draw, end_draw, false );
+            //因为每个弧度都是单独的  所以绘出来的都是 一端连接另一端的填充 必须反向包裹  资料: 非零环绕原则
+            context.arc( CENTER_X, CENTER_Y, BUTTON_RADIUS, end_draw, start_draw, true );
+            //奇偶数的色值
+            i % 2 ? context.fillStyle = '#FF6766' : context.fillStyle = '#FD5757';
+            context.fill();            
+            context.restore();
+            
+            //绘制字体
+            
+        }
+    }
+
+
+
+</script>
 </html>
