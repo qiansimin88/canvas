@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
+    <div id="spin_button" style="position: absolute;left: 207px;top: 207px;width: 100px;height: 100px;line-height: 100px;text-align: center;background: yellow;border-radius: 100%;cursor: pointer">旋转</div>
     <canvas id="canvas" width="500" height="500"></canvas>
 </body>
 <script>
@@ -59,9 +60,23 @@
             context.fillStyle = '#fff';
             //translate移动位置 x,y 坐标  Math.cos(弧度)的到余弦值  并且余弦值 cons = 邻边 / 斜边, 已知斜边就是圆的半径，所以得出 邻边的 X
             context.translate(
-                CENTER_X + Math.cos( start_draw + end_draw / 2 ) * CICLE_RADIUS
-            )
+                CENTER_X + Math.cos( start_draw + SINGER_RADIAN / 2 ) * FONT_RADIUS,    //x的偏移量
+                CENTER_Y + Math.sin( start_draw + SINGER_RADIAN / 2 ) * FONT_RADIUS
+            );
+            //需要旋转 和 弧度的角度平行  1.让文字垂直弧度角度 2.顺时针90度达到  平行效果
+            context.rotate( start_draw + SINGER_RADIAN / 2 + Math.PI / 2);
+            //measureText(text).width 得到当前字体的宽度  向左偏移一半的距离 保持居中效果  canvas的坐标以当前的为准 因为上面已经translate了  所以这个坐标就是以上面的为基点  而不是0，0为基点了
+            context.fillText( PRIZEARRAY[i], -context.measureText( PRIZEARRAY[i] ).width / 2, 0);
+            context.restore();
         }
+        //画中间的指针
+        context.save();
+        context.beginPath();
+        context.strokeStyle = "red";
+        context.moveTo( CENTER_X, CENTER_Y );
+        context.lineTo( CENTER_X, 150 );
+        context.stroke();
+        context.restore();
     }
 
 
